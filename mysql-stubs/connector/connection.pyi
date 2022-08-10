@@ -1,98 +1,97 @@
-from __future__ import annotations
-
-import typing
 from decimal import Decimal
+from typing import (Any, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
+                    Tuple, TypeAlias, TypedDict)
 
 from .abstracts import MySQLConnectionAbstract as MySQLConnectionAbstract
 
 # from .abstracts import MySQLCursorAbstract as MySQLCursorAbstract
 
-class GetRowStatus(typing.TypedDict):
+class GetRowStatus(TypedDict):
     warning_count: int
     status_flag: int
 
-class StmtInfo(typing.TypedDict):
+class StmtInfo(TypedDict):
     statement_id: int
     num_columns: int
     num_params: int
     warning_count: int
-    columns: list[tuple[typing.Any, ...]]
-    parameters: list[typing.Any]
+    columns: List[Tuple[Any, ...]]
+    parameters: List[Any]
 
-Row: typing.TypeAlias = tuple[typing.Any, ...]
+Row: TypeAlias = Tuple[Any, ...]
 
 class MySQLConnection(MySQLConnectionAbstract):
     def __init__(
         self,
-        *args: typing.Any,
-        **kwargs: typing.Any,
+        *args: Any,
+        **kwargs: Any,
     ) -> None: ...
     def shutdown(self) -> None: ...
     def close(self) -> None: ...
 
-    disconnect: typing.Any = ...
+    disconnect: Any = ...
 
     @property
     def in_transaction(self) -> bool: ...
     def get_row(
         self,
         binary: bool = ...,
-        columns: typing.Any | None = ...,
-    ) -> tuple[Row, None] | tuple[None, GetRowStatus]: ...
+        columns: Any | None = ...,
+    ) -> Tuple[Row, None] | Tuple[None, GetRowStatus]: ...
     def get_rows(
         self,
-        count: typing.Any | None = ...,
+        count: Any | None = ...,
         binary: bool | None = ...,
-        columns: typing.Any | None = ...,
-    ) -> tuple[list[Row], GetRowStatus]: ...
+        columns: Any | None = ...,
+    ) -> Tuple[List[Row], GetRowStatus]: ...
     def consume_results(self) -> None: ...
     def cmd_init_db(
         self,
-        database: typing.Any,
-    ) -> typing.Mapping[str, typing.Any]: ...
+        database: Any,
+    ) -> Mapping[str, Any]: ...
     def cmd_query(
         self,
-        query: typing.Any,
+        query: Any,
         raw: bool = ...,
         buffered: bool = ...,
         raw_as_string: bool = ...,
-    ) -> typing.Any: ...
+    ) -> Any: ...
     def cmd_query_iter(
         self,
-        statements: typing.Any,
+        statements: Any,
     ) -> None: ...
     def cmd_refresh(
         self,
-        options: typing.Any,
-    ) -> typing.Mapping[str, int]: ...
+        options: Any,
+    ) -> Mapping[str, int]: ...
     def cmd_quit(self) -> bytearray: ...
     def cmd_shutdown(
         self,
-        shutdown_type: typing.Any | None = ...,
-    ) -> typing.Mapping[str, int]: ...
-    def cmd_statistics(self) -> typing.Mapping[str, int | Decimal]: ...
+        shutdown_type: Any | None = ...,
+    ) -> Mapping[str, int]: ...
+    def cmd_statistics(self) -> Mapping[str, int | Decimal]: ...
     def cmd_process_kill(
         self,
-        mysql_pid: typing.Any,
-    ) -> typing.Mapping[str, int]: ...
-    def cmd_debug(self) -> typing.Mapping[str, int]: ...
-    def cmd_ping(self) -> typing.Mapping[str, int]: ...
+        mysql_pid: Any,
+    ) -> Mapping[str, int]: ...
+    def cmd_debug(self) -> Mapping[str, int]: ...
+    def cmd_ping(self) -> Mapping[str, int]: ...
     def cmd_change_user(
         self,
         username: str = ...,
         password: str = ...,
         database: str = ...,
         charset: int = ...,
-    ) -> typing.Mapping[str, int]: ...
+    ) -> Mapping[str, int]: ...
     @property
     def database(self) -> MySQLConnection: ...
     @database.setter
-    def database(self, value: typing.Any) -> MySQLConnection: ...
+    def database(self, value: Any) -> MySQLConnection: ...
     def is_connected(self) -> bool: ...
     def reset_session(
         self,
-        user_variables: typing.Any | None = ...,
-        session_variables: typing.Any | None = ...,
+        user_variables: Any | None = ...,
+        session_variables: Any | None = ...,
     ) -> None: ...
     def reconnect(self, attempts: int = ..., delay: int = ...) -> None: ...
     def ping(
@@ -102,38 +101,36 @@ class MySQLConnection(MySQLConnectionAbstract):
     def connection_id(self) -> int: ...
     def cursor(
         self,
-        buffered: typing.Any | None = ...,
-        raw: typing.Any | None = ...,
-        prepared: typing.Any | None = ...,
-        cursor_class: typing.Any | None = ...,
-        dictionary: typing.Any | None = ...,
-        named_tuple: typing.Any | None = ...,
+        buffered: Any | None = ...,
+        raw: Any | None = ...,
+        prepared: Any | None = ...,
+        cursor_class: Any | None = ...,
+        dictionary: Any | None = ...,
+        named_tuple: Any | None = ...,
     ) -> MySQLCursor: ...
     # ) -> MySQLCursorAbstract: ...
     def commit(self) -> None: ...
     def rollback(self) -> None: ...
-    def info_query(self, query: typing.Any) -> tuple[typing.Any, ...]: ...
-    def cmd_stmt_prepare(self, statement: typing.Any) -> StmtInfo: ...
+    def info_query(self, query: Any) -> Tuple[Any, ...]: ...
+    def cmd_stmt_prepare(self, statement: Any) -> StmtInfo: ...
     def cmd_stmt_execute(
         self,
-        statement_id: typing.Any,
-        data: typing.Any = ...,
-        parameters: typing.Any = ...,
+        statement_id: Any,
+        data: Any = ...,
+        parameters: Any = ...,
         flags: int = ...,
-    ) -> typing.Any: ...
-    def cmd_stmt_close(self, statement_id: typing.Any) -> None: ...
+    ) -> Any: ...
+    def cmd_stmt_close(self, statement_id: Any) -> None: ...
     def cmd_stmt_send_long_data(
-        self, statement_id: typing.Any, param_id: typing.Any, data: typing.Any
-    ) -> typing.Any: ...
-    def cmd_stmt_reset(self, statement_id: typing.Any) -> None: ...
+        self, statement_id: Any, param_id: Any, data: Any
+    ) -> Any: ...
+    def cmd_stmt_reset(self, statement_id: Any) -> None: ...
     def cmd_reset_connection(self) -> None: ...
     def handle_unread_result(self) -> None: ...
 
-ExecuteParams: typing.TypeAlias = (
-    tuple[typing.Any, ...] | list[typing.Any] | dict[str, typing.Any]
-)
+ExecuteParams: TypeAlias = Tuple[Any, ...] | List[Any] | Dict[str, Any]
 
-class ColDescription(typing.NamedTuple):
+class ColDescription(NamedTuple):
     column_name: str
     type: str
     _: None
@@ -141,7 +138,7 @@ class ColDescription(typing.NamedTuple):
     _: None
     _: None
     null_ok: bool
-    column_flags: tuple[str]
+    column_flags: Tuple[str]
 
 class MySQLCursor:
     def __init__(
@@ -151,7 +148,7 @@ class MySQLCursor:
     def callproc(
         self,
         procname: str,
-        args: tuple[typing.Any, ...] = ...,
+        args: Tuple[Any, ...] = ...,
     ) -> None:
         """Calls a stored procedue with the given arguments
 
@@ -206,7 +203,7 @@ class MySQLCursor:
     def executemany(
         self,
         operation: str,
-        params: typing.Iterable[ExecuteParams],
+        params: Iterable[ExecuteParams],
     ) -> None:
         """Execute the given operation multiple times
 
@@ -230,13 +227,13 @@ class MySQLCursor:
         data using the execute() method.
         """
         ...
-    def fetchall(self) -> list[tuple[typing.Any, ...]]:
+    def fetchall(self) -> List[Tuple[Any, ...]]:
         """Returns all rows of a query result set
 
         Returns a list of tuples.
         """
         ...
-    def fetchmany(self, size: int = ...) -> list[tuple[typing.Any, ...]]:
+    def fetchmany(self, size: int = ...) -> List[Tuple[Any, ...]]:
         """Returns the next set of rows of a query result, returning a
         list of tuples. When no more rows are available, it returns an
         empty list.
@@ -244,13 +241,13 @@ class MySQLCursor:
         The number of rows returned can be specified using the size argument,
         which defaults to one
         """
-    def fetchone(self) -> tuple[typing.Any, ...]:
+    def fetchone(self) -> Tuple[Any, ...]:
         """Returns next row of a query result set
 
         Returns a tuple or None.
         """
         ...
-    def _fetch_warnings(self) -> list[str] | None:
+    def _fetch_warnings(self) -> List[str] | None:
         """
         Fetch warnings doing a SHOW WARNINGS. Can be called after getting
         the result.
@@ -258,7 +255,7 @@ class MySQLCursor:
         Returns a result set or None when there were no warnings.
         """
         ...
-    def stored_results(self) -> typing.Iterator[tuple[typing.Any, ...]]:
+    def stored_results(self) -> Iterator[Tuple[Any, ...]]:
         """Returns an iterator for stored results
 
         This method returns an iterator over results which are stored when
@@ -269,7 +266,7 @@ class MySQLCursor:
         """
         ...
     @property
-    def column_names(self) -> tuple[str, ...]:
+    def column_names(self) -> Tuple[str, ...]:
         """Returns column names
 
         This property returns the columns names as a tuple.
@@ -278,7 +275,7 @@ class MySQLCursor:
         """
         ...
     @property
-    def description(self) -> list[ColDescription]:
+    def description(self) -> List[ColDescription]:
         """Returns description of columns in a result
 
         This property returns a list of tuples describing the columns in
