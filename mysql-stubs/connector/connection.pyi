@@ -1,6 +1,5 @@
 from decimal import Decimal
-from typing import (Any, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Tuple, TypeAlias, TypedDict)
+from typing import (Any, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Tuple, TypedDict)
 
 from .abstracts import MySQLConnectionAbstract as MySQLConnectionAbstract
 
@@ -17,8 +16,6 @@ class StmtInfo(TypedDict):
     warning_count: int
     columns: List[Tuple[Any, ...]]
     parameters: List[Any]
-
-Row: TypeAlias = Tuple[Any, ...]
 
 class MySQLConnection(MySQLConnectionAbstract):
     def __init__(
@@ -37,13 +34,13 @@ class MySQLConnection(MySQLConnectionAbstract):
         self,
         binary: bool = ...,
         columns: Any | None = ...,
-    ) -> Tuple[Row, None] | Tuple[None, GetRowStatus]: ...
+    ) -> Tuple[Tuple[Any, ...], None] | Tuple[None, GetRowStatus]: ...
     def get_rows(
         self,
         count: Any | None = ...,
         binary: bool | None = ...,
         columns: Any | None = ...,
-    ) -> Tuple[List[Row], GetRowStatus]: ...
+    ) -> Tuple[List[Tuple[Any, ...]], GetRowStatus]: ...
     def consume_results(self) -> None: ...
     def cmd_init_db(
         self,
@@ -128,8 +125,6 @@ class MySQLConnection(MySQLConnectionAbstract):
     def cmd_reset_connection(self) -> None: ...
     def handle_unread_result(self) -> None: ...
 
-ExecuteParams: TypeAlias = Tuple[Any, ...] | List[Any] | Dict[str, Any]
-
 class ColDescription(NamedTuple):
     column_name: str
     type: str
@@ -179,7 +174,7 @@ class MySQLCursor:
     def execute(
         self,
         operation: str,
-        params: ExecuteParams | None = ...,
+        params: Tuple[Any, ...] | List[Any] | Dict[str, Any] | None = ...,
         multi: bool = ...,
     ) -> None:
         """Executes the given operation
@@ -203,7 +198,7 @@ class MySQLCursor:
     def executemany(
         self,
         operation: str,
-        params: Iterable[ExecuteParams],
+        params: Iterable[Tuple[Any, ...] | List[Any] | Dict[str, Any]],
     ) -> None:
         """Execute the given operation multiple times
 
