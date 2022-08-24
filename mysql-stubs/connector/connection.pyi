@@ -243,7 +243,7 @@ class MySQLCursor:
         Returns a tuple or None.
         """
         ...
-    def _fetch_warnings(self) -> List[Tuple[str, int, str]] | None:
+    def fetchwarnings(self) -> List[Tuple[str, int, str]] | None:
         """
         Fetch warnings doing a SHOW WARNINGS. Can be called after getting
         the result.
