@@ -1,5 +1,6 @@
 from decimal import Decimal
-from typing import (Any, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Tuple, TypedDict)
+from typing import (Any, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
+                    Tuple, TypedDict)
 
 from .abstracts import MySQLConnectionAbstract as MySQLConnectionAbstract
 
@@ -242,7 +243,7 @@ class MySQLCursor:
         Returns a tuple or None.
         """
         ...
-    def _fetch_warnings(self) -> List[str] | None:
+    def _fetch_warnings(self) -> List[Tuple[str, int, str]] | None:
         """
         Fetch warnings doing a SHOW WARNINGS. Can be called after getting
         the result.
