@@ -1,4 +1,5 @@
 from decimal import Decimal
+import typing
 from typing import (Any, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
                     Tuple, TypedDict)
 
@@ -136,6 +137,10 @@ class ColDescription(NamedTuple):
     null_ok: bool
     column_flags: Tuple[str]
 
+
+ExecuteParams: typing.TypeAlias = Tuple[Any, ...] | List[Any] | Dict[str, Any]
+
+
 class MySQLCursor:
     def __init__(
         self,
@@ -175,7 +180,7 @@ class MySQLCursor:
     def execute(
         self,
         operation: str,
-        params: Tuple[Any, ...] | List[Any] | Dict[str, Any] | None = ...,
+        params: ExecuteParams | None = ...,
         multi: bool = ...,
     ) -> None:
         """Executes the given operation
@@ -199,7 +204,7 @@ class MySQLCursor:
     def executemany(
         self,
         operation: str,
-        params: Iterable[Tuple[Any, ...] | List[Any] | Dict[str, Any]],
+        params: Tuple[ExecuteParams, ...] | List[ExecuteParams],
     ) -> None:
         """Execute the given operation multiple times
 
