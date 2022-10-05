@@ -1,7 +1,17 @@
-from decimal import Decimal
 import typing
-from typing import (Any, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Tuple, TypedDict)
+from decimal import Decimal
+from typing import (
+    Any,
+    Dict,
+    Optional,
+    Iterator,
+    List,
+    Mapping,
+    NamedTuple,
+    Tuple,
+    TypedDict,
+    Union,
+)
 
 from .abstracts import MySQLConnectionAbstract as MySQLConnectionAbstract
 
@@ -35,13 +45,16 @@ class MySQLConnection(MySQLConnectionAbstract):
     def get_row(
         self,
         binary: bool = ...,
-        columns: Any | None = ...,
-    ) -> Tuple[Tuple[Any, ...], None] | Tuple[None, GetRowStatus]: ...
+        columns: Optional[Any] = ...,
+    ) -> Union[
+        Tuple[Tuple[Any, ...], None],
+        Tuple[None, GetRowStatus],
+    ]: ...
     def get_rows(
         self,
-        count: Any | None = ...,
-        binary: bool | None = ...,
-        columns: Any | None = ...,
+        count: Optional[Any] = ...,
+        binary: Optional[bool] = ...,
+        columns: Optional[Any] = ...,
     ) -> Tuple[List[Tuple[Any, ...]], GetRowStatus]: ...
     def consume_results(self) -> None: ...
     def cmd_init_db(
@@ -66,9 +79,9 @@ class MySQLConnection(MySQLConnectionAbstract):
     def cmd_quit(self) -> bytearray: ...
     def cmd_shutdown(
         self,
-        shutdown_type: Any | None = ...,
+        shutdown_type: Optional[Any] = ...,
     ) -> Mapping[str, int]: ...
-    def cmd_statistics(self) -> Mapping[str, int | Decimal]: ...
+    def cmd_statistics(self) -> Mapping[str, Union[int, Decimal]]: ...
     def cmd_process_kill(
         self,
         mysql_pid: Any,
@@ -89,8 +102,8 @@ class MySQLConnection(MySQLConnectionAbstract):
     def is_connected(self) -> bool: ...
     def reset_session(
         self,
-        user_variables: Any | None = ...,
-        session_variables: Any | None = ...,
+        user_variables: Optional[Any] = ...,
+        session_variables: Optional[Any] = ...,
     ) -> None: ...
     def reconnect(self, attempts: int = ..., delay: int = ...) -> None: ...
     def ping(
@@ -100,12 +113,12 @@ class MySQLConnection(MySQLConnectionAbstract):
     def connection_id(self) -> int: ...
     def cursor(
         self,
-        buffered: Any | None = ...,
-        raw: Any | None = ...,
-        prepared: Any | None = ...,
-        cursor_class: Any | None = ...,
-        dictionary: Any | None = ...,
-        named_tuple: Any | None = ...,
+        buffered: Optional[Any] = ...,
+        raw: Optional[Any] = ...,
+        prepared: Optional[Any] = ...,
+        cursor_class: Optional[Any] = ...,
+        dictionary: Optional[Any] = ...,
+        named_tuple: Optional[Any] = ...,
     ) -> MySQLCursor: ...
     # ) -> MySQLCursorAbstract: ...
     def commit(self) -> None: ...
@@ -138,13 +151,17 @@ class ColDescription(NamedTuple):
     column_flags: Tuple[str]
 
 
-ExecuteParams: typing.TypeAlias = Tuple[Any, ...] | List[Any] | Dict[str, Any]
+_T = typing.TypeVar("_T")
 
+ExecuteParams: typing.TypeAlias = Union[
+    typing.Mapping[str, Any],
+    typing.Sequence[Any],
+]
 
 class MySQLCursor:
     def __init__(
         self,
-        connection: MySQLConnection | None = ...,
+        connection: Optional[Any] = ...,
     ) -> None: ...
     def callproc(
         self,
@@ -180,7 +197,7 @@ class MySQLCursor:
     def execute(
         self,
         operation: str,
-        params: ExecuteParams | None = ...,
+        params: Optional[Any] = ...,
         multi: bool = ...,
     ) -> None:
         """Executes the given operation
@@ -204,7 +221,7 @@ class MySQLCursor:
     def executemany(
         self,
         operation: str,
-        params: Tuple[ExecuteParams, ...] | List[ExecuteParams],
+        params: typing.Sequence[ExecuteParams],
     ) -> None:
         """Execute the given operation multiple times
 
@@ -248,7 +265,7 @@ class MySQLCursor:
         Returns a tuple or None.
         """
         ...
-    def fetchwarnings(self) -> List[Tuple[str, int, str]] | None:
+    def fetchwarnings(self) -> Optional[List[Tuple[str, int, str]]]:
         """
         Fetch warnings doing a SHOW WARNINGS. Can be called after getting
         the result.

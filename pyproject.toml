@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mysql-connector-python-stubs"
-version = "0.2.1"
+version = "0.2.2"
 description = ""
 authors = ["Nils Olsson <nilso@enosis.net>"]
 packages = [
@@ -8,7 +8,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 
 [tool.poetry.dev-dependencies]
 pylama = "^8.4.1"
@@ -18,3 +18,26 @@ isort = "^5.10.1"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+exclude = [
+    "cpd_tool/_old",
+    "**/node_modules",
+    "**/__pycache__",
+    ".git",
+    ".venv",
+]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "strict"
+reportImplicitStringConcatenation = true
+reportCallInDefaultInitializer = true
+reportUnnecessaryCast = true
+
+[tool.black]
+line-length = 90
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3  # 3/5: less/more compact
+line_length = 90
